@@ -1,0 +1,11 @@
+[server]
+port = 3000
+[server.log]
+port = 4000 # 实时日志的端口
+
+[db]
+host = 'mongodb://localhost/projectname'
+
+[site.other1]
+host = 'http://other1.projectname.com' # todo 自行加入其它配置，如外接其它服务器
+apikey = 'apikey'

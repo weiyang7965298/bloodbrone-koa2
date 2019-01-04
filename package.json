@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "koa": "^2.6.2",
+    "koa-body": "^4.0.6",
+    "koa-router": "^7.4.0",
+    "koa2-cors": "^2.0.6",
+    "log4js": "^3.0.6",
+    "mongoose": "^5.4.1",
+    "node-fetch": "^2.3.0",
+    "toml": "^2.3.3",
+    "ws": "^6.1.2"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^5.11.1",
+    "mocha": "^5.2.0",
+    "supervisor": "^0.12.0"
+  },
+  "scripts": {
+    "test:ws": "mocha ./tests/ws --exit",
+    "test:rest": "mocha ./tests/rest --exit",
+    "test": "mocha ./tests/ws ./tests/rest --exit",
+    "serve": "supervisor app.js"
+  }
+}

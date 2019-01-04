@@ -1,0 +1,10 @@
+[server]
+port = 3000
+[server.log]
+port = 4000 # 实时日志的端口
+
+[db]
+host = 'mongodb://localhost/projectname'
+
+[site.auth]
+host = '' # todo 自行加入其它配置，如外接其它服务器
