@@ -29,23 +29,23 @@ log4js.configure({
 
 module.exports = {
   c: (name, v) => {
-    log4js.getLogger(name).debug(format(v))
+    log4js.getLogger(JSON.stringify(name)).debug(format(v))
     realtime.send(name, v)
   },
   d: (name, v) => {
-    log4js.getLogger(name).debug(format(v))
+    log4js.getLogger(JSON.stringify(name)).debug(format(v))
     realtime.send(name, v)
   },
   i: (name, v) => {
-    log4js.getLogger(name).info(format(v))
+    log4js.getLogger(JSON.stringify(name)).info(format(v))
     realtime.send(name, v)
   },
   w: (name, v) => {
-    log4js.getLogger(name).warn(format(v))
+    log4js.getLogger(JSON.stringify(name)).warn(format(v))
     realtime.send(name, v)
   },
   e: (name, v) => {
-    log4js.getLogger(name).error(format(v))
+    log4js.getLogger(JSON.stringify(name)).error(format(v))
     realtime.send(name, v)
   },
 }

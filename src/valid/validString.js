@@ -26,7 +26,7 @@ class validString {
     return this
   }
   mongoId() {
-    if (this.v.length < 15 || this.v.length > 30) throw new paramError(`${this.name}: ${this.v}, must be mongodb id`)
+    if ((this.v.length === 24 || this.v.length === 12) && isNaN(parseInt(this.v,16))!== true) throw new paramError(`${this.name}: ${this.v}, must be mongodb id`)
     return this
   }
   of(list) {

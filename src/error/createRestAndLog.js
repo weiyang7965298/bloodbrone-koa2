@@ -1,5 +1,5 @@
 const log = require('../log')
-module.exports = async (err) => {
+module.exports = (err) => {
   let result = {}
   switch (err.name) {
   case 'PARAM': 
