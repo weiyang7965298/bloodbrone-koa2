@@ -5,7 +5,7 @@ const host = `http://localhost:${config.server.port}`
 const db = require('../../src/db')
 const operator = require('../data/operator')
 
-describe('weapon controller', () => {
+xdescribe('weapon controller', () => {
   it('save, delete', async() => {
     let rest = await fetch(`${host}/bb/weapon`, {method: 'post', body: 'name=chikage2&phy=92'})
     expect(rest.code).to.be.deep.equal('SUCCESS')

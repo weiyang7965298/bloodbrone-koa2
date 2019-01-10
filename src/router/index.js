@@ -7,4 +7,7 @@ router.use('', bbWeaponController.routes(), bbWeaponController.allowedMethods())
 const weaponController = require('../controller/everyone/weaponController')
 router.use('', weaponController.routes(), weaponController.allowedMethods())
 
+const bbUserController = require('../controller/bb/userController')
+router.use('', bbUserController.routes(), bbUserController.allowedMethods())
+
 module.exports = router
