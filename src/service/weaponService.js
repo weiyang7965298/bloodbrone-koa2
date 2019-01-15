@@ -7,6 +7,7 @@ module.exports = {
     if (exists) {
       throw new failError('data exists')
     }
+    e.createAt = new Date()
     e = new model(e)
     await e.save()
     return e

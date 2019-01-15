@@ -1,4 +1,4 @@
-const model = require('../../../src/model/weapon')
+const service = require('../../../src/service/weaponService')
 
 module.exports = {
   save: () => {
@@ -9,7 +9,7 @@ module.exports = {
       )
     )  
     data.list.forEach(async e => {
-      await new model(e).save()
+      await new service(e).save()
     })
   }
 }

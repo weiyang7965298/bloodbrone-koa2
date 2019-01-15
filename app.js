@@ -7,7 +7,9 @@ app.use(require('./src/middleware/init/ok'))
 if (process.env.NODE_ENV !== 'prod') app.use(require('./src/middleware/reqTimer'))
 app.use(require('./src/middleware/errorHandler'))
 app.use(require('./src/middleware/paramHandler'))
-app.use(require('./src/middleware/useridHandler'))
+app.use(require('./src/middleware/loginUserHandler'))
+app.use(require('./src/middleware/loginBbHandler'))
+
 app.use(require('./src/router').routes()).use(require('./src/router').allowedMethods())
 
 const config = require('./config/env')

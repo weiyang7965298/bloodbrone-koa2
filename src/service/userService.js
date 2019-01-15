@@ -1,3 +1,4 @@
+const securityUtil = require('../util/securityUtil')
 const model = require('../model/user')
 const failError = require('../error/failError')
 
@@ -7,7 +8,10 @@ module.exports = {
     if (exists) {
       throw new failError('data exists')
     }
-    e = new model(e)
+    e.password = securityUtil.digest(e.password)
+    e.createAt = Date.now()
+    e.updateAt = Date.now()
+    e = new model(e)    
     await e.save()
     return e
   },
@@ -15,8 +19,9 @@ module.exports = {
     await model.deleteOne({_id: new model(e).id})
   },
   update: async(e) => {    
-    let exists = await model.findOne({_id: e._id}, '-__v')
-    let next = new model({...exists, ...e})    
+    let exists = await model.findOne({_id: e._id}, '-__v')    
+    e.updateAt = Date.now()
+    let next = new model({...exists, ...e})
     await next.updateOne(next)
   },
   findById: async(e) => {
@@ -30,8 +35,9 @@ module.exports = {
     return result
   },
 
-  findByUsernameAndPassword: async(e) => {    
-    let result = await model.findOne({username: e.username, password: e.password}, '-__v')
-    return result
+  findByUsernameAndPassword: async(e) => {  
+    e.password = securityUtil.digest(e.password)      
+    let result = await model.findOne({username: e.username, password: e.password}, '-__v')    
+    return result || model.null
   }
 }
