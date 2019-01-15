@@ -1,0 +1,8 @@
+[[list]]
+  username = 'admin'
+  password = '111111'
+  type = 'admin'
+[[list]]
+  username = 'aaa'
+  password = '111111'
+  type = 'player'

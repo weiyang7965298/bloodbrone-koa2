@@ -27,7 +27,7 @@ module.exports = {
     return await model.countDocuments({name: {$regex: `${filter.name}.*`}})
   },
   find: async(filter) => {
-    let result = await model.find({name: {$regex: `${filter.name}.*`}}, '-__v').skip(filter.start).limit(filter.limit).sort('name')
+    let result = await model.find({name: {$regex: `${filter.name}.*`}}, '-__v').skip(filter.start).limit(filter.limit).sort('name')    
     return result
   }
 }

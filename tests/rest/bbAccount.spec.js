@@ -7,42 +7,42 @@ const operator = require('../data/operator')
 
 const wait = require('../../src/util/wait')
 
-describe('user controller', () => {
+xdescribe('bb user controller', () => {
   let token
   let refreshToken
   it('save, delete', async() => {    
-    let rest = await fetch(`${host}/bb/user`, {method: 'post', body: 'username=aaa&password=aaaaaa', headers: {authorization: token}})
+    let rest = await fetch(`${host}/bb/account`, {method: 'post', body: 'username=aaaadmin&password=aaaaaa', headers: {authorization: token}})
     expect(rest.code).to.be.deep.equal('SUCCESS')
     let _id = rest.data    
-    rest = await fetch(`${host}/bb/user/${_id}`, {method: 'delete', headers: {authorization: token}})
+    rest = await fetch(`${host}/bb/account/${_id}`, {method: 'delete', headers: {authorization: token}})
     expect(rest.code).to.be.deep.equal('SUCCESS')
   })
   
   it('list', async() => {
-    let rest = await fetch(`${host}/bb/user`, {headers: {authorization: token}})
+    let rest = await fetch(`${host}/bb/account`, {headers: {authorization: token}})
     expect(rest.code).to.be.deep.equal('SUCCESS')
-    expect(rest.data.length).to.be.deep.equal(1)
+    expect(rest.data.length).to.be.deep.equal(2)
   })
 
   it('findById, update', async() => {
-    let rest = await fetch(`${host}/bb/user`, {headers: {authorization: token}})
+    let rest = await fetch(`${host}/bb/account`, {headers: {authorization: token}})
     let _id = rest.data[0]._id
     let username = rest.data[0].username
 
-    rest = await fetch(`${host}/bb/user/${_id}`, {headers: {authorization: token}})
+    rest = await fetch(`${host}/bb/account/${_id}`, {headers: {authorization: token}})
     expect(rest.code).to.be.deep.equal('SUCCESS')
     expect(rest.data.username).to.be.deep.equal(username)
-    rest = await fetch(`${host}/bb/user/${_id}`, {method: 'put', body: 'username=aaa', headers: {authorization: token}})
+    rest = await fetch(`${host}/bb/account/${_id}`, {method: 'put', body: 'username=aaa', headers: {authorization: token}})
     expect(rest.code).to.be.deep.equal('SUCCESS')
 
-    rest = await fetch(`${host}/bb/user/${_id}`, {headers: {authorization: token}})
+    rest = await fetch(`${host}/bb/account/${_id}`, {headers: {authorization: token}})
     expect(rest.data.username).to.be.deep.equal('aaa')
 
-    await fetch(`${host}/bb/user/${_id}`, {method: 'put', body: `username=${username}`, headers: {authorization: token}})
+    await fetch(`${host}/bb/account/${_id}`, {method: 'put', body: `username=${username}`, headers: {authorization: token}})
   })
 
   it('findById: not exists', async() => {
-    let rest = await fetch(`${host}/bb/user/537eed02ed345b2e039652d5`, {headers: {authorization: token}})
+    let rest = await fetch(`${host}/bb/account/537eed02ed345b2e039652d5`, {headers: {authorization: token}})
     expect(rest.code).to.be.deep.equal('SUCCESS')
     expect(rest.data.name).to.be.not.ok
   })
@@ -59,14 +59,14 @@ describe('user controller', () => {
     expect(rest.code).to.be.deep.equal('SUCCESS')
     expect(rest.data.token).to.be.deep.not.equal(token)
     expect(rest.data.refreshToken).to.be.deep.not.equal(refreshToken)
-    let unauthRest = await fetch(`${host}/bb/user/537eed02ed345b2e039652d5`, {headers: {authorization: token}})
+    let unauthRest = await fetch(`${host}/bb/account/537eed02ed345b2e039652d5`, {headers: {authorization: token}})
     expect(unauthRest.code).to.be.deep.equal('UNAUTH')
     token = `Bearer ${rest.data.token}`
   })
   it('logout', async() => {
     let rest = await fetch(`${host}/bb/logout`, {method: 'post', headers: {authorization: token}})
     expect(rest.code).to.be.deep.equal('SUCCESS')    
-    let unauthRest = await fetch(`${host}/bb/user/537eed02ed345b2e039652d5`, {headers: {authorization: token}})
+    let unauthRest = await fetch(`${host}/bb/account/537eed02ed345b2e039652d5`, {headers: {authorization: token}})
     expect(unauthRest.code).to.be.deep.equal('UNAUTH')    
     rest = await fetch(`${host}/bb/login`, {method: 'post', body: 'username=admin&password=111111'})
     token = `Bearer ${rest.data.token}`   
@@ -74,17 +74,17 @@ describe('user controller', () => {
   })
 
   it('save FAIL: username exists', async() => {
-    let rest = await fetch(`${host}/bb/user`, {method: 'post', body: 'username=admin&password=aaaaaa', headers: {authorization: token}})
+    let rest = await fetch(`${host}/bb/account`, {method: 'post', body: 'username=admin&password=aaaaaa', headers: {authorization: token}})
     expect(rest.code).to.be.deep.equal('FAIL')
   })
   it('save FAIL: username too long', async() => {
-    let rest = await fetch(`${host}/bb/user`, {method: 'post', body: 'username=chikagea23s1df23a1s32df1sad5fv1sa856v1sa38e13f51a5seg13ad5s1g352sad153&password=aaaaaa', headers: {authorization: token}})
+    let rest = await fetch(`${host}/bb/account`, {method: 'post', body: 'username=chikagea23s1df23a1s32df1sad5fv1sa856v1sa38e13f51a5seg13ad5s1g352sad153&password=aaaaaa', headers: {authorization: token}})
     expect(rest.code).to.be.deep.equal('PARAM')
   })
   it('update FAIL: username too long', async() => {
-    let rest = await fetch(`${host}/bb/user`, {headers: {authorization: token}})
+    let rest = await fetch(`${host}/bb/account`, {headers: {authorization: token}})
     let _id = rest.data[0]._id
-    rest = await fetch(`${host}/bb/user/${_id}`, {method: 'put', body: 'username=chikagea23s1df23a1s32df1sad5fv1sa856v1sa38e13f51a5seg13ad5s1g352sad153', headers: {authorization: token}})
+    rest = await fetch(`${host}/bb/account/${_id}`, {method: 'put', body: 'username=chikagea23s1df23a1s32df1sad5fv1sa856v1sa38e13f51a5seg13ad5s1g352sad153', headers: {authorization: token}})
     expect(rest.code).to.be.deep.equal('PARAM')
   })
   it('login FAIL: username password incorrect', async() => {
@@ -93,7 +93,7 @@ describe('user controller', () => {
   })
   before(async() => {
     await db.drop()
-    operator.saveUser()
+    operator.saveAccount()
     await wait(50) // 不然有可能数据还没插进去
     let rest = await fetch(`${host}/bb/login`, {method: 'post', body: 'username=admin&password=111111'})    
     token = `Bearer ${rest.data.token}`   

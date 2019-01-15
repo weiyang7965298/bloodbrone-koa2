@@ -4,7 +4,7 @@ const router = new Router()
 const jwt = require('jsonwebtoken')
 const randtoken = require('rand-token')
 
-const service = require('../../service/userService')
+const service = require('../../service/accountService')
 const valid = require('../../valid')
 
 const bizError = require('../../error/bizError')
@@ -12,18 +12,18 @@ const bizError = require('../../error/bizError')
 const refreshTokenMap = require('../../store/refreshTokenMap')
 const blacklist = require('../../store/bbBalckList')
 
-router.post('/bb/user', async(ctx, next) => {
+router.post('/bb/account', async(ctx, next) => {
   let e = {
     username: ctx.params.username,
     password: ctx.params.password,
   }  
-  valid.string('user.username', e.username).is().lengthIn(1, 50)
-  valid.string('user.password', e.password).is().lengthIn(1, 50)
+  valid.string('account.username', e.username).is().lengthIn(1, 50)
+  valid.string('account.password', e.password).is().lengthIn(1, 50)
   e = await service.save(e) 
   ctx.ok(e._id)
 })
 
-router.delete('/bb/user/:_id', async(ctx, next) => {
+router.delete('/bb/account/:_id', async(ctx, next) => {
   let e = {
     _id: ctx.params._id,
   }
@@ -31,32 +31,32 @@ router.delete('/bb/user/:_id', async(ctx, next) => {
   ctx.ok()
 })
 
-router.put('/bb/user/:_id', async(ctx, next) => {  
+router.put('/bb/account/:_id', async(ctx, next) => {  
   let e = {
     _id: ctx.params._id,
     username: ctx.params.username,
   }
-  if (e.username) valid.string('user.username', e.username).is().lengthIn(1, 50)
-  if (e.password) valid.string('user.password', e.password).is().lengthIn(1, 50)
+  if (e.username) valid.string('account.username', e.username).is().lengthIn(1, 50)
+  if (e.password) valid.string('account.password', e.password).is().lengthIn(1, 50)
   await service.update(e)
   ctx.ok()
 })
 
-router.get('/bb/user/:_id', async(ctx, next) => {
+router.get('/bb/account/:_id', async(ctx, next) => {
   let e = {
     _id: ctx.params._id
   }
-  let user = await service.findById(e)  
-  ctx.ok(user)
+  let account = await service.findById(e)  
+  ctx.ok(account)
 })
-router.get('/bb/user/count', async(ctx, next) => {
+router.get('/bb/account/count', async(ctx, next) => {
   let filter = {
     name: ctx.params.name || '',
   }
   let count = await service.count(filter)
   ctx.ok(count)
 })
-router.get('/bb/user', async(ctx, next) => {
+router.get('/bb/account', async(ctx, next) => {
   let filter = {
     name: ctx.params.name || '',
     start: parseInt(ctx.params.start) || 0,
@@ -71,13 +71,12 @@ router.post('/bb/login', async(ctx, next) => {
     username: ctx.params.username,
     password: ctx.params.password,
   }
-  valid.string('user.username', e.username).is().lengthIn(1, 50)
-  valid.string('user.password', e.password).is().lengthIn(1, 50)
-  let exists = await service.findByUsernameAndPassword(e)
-  if (exists.isNull) throw new bizError('USERNAME_PASSWORD_INCORRECT')
-  let token = jwt.sign({_id: exists._id, date: new Date().getTime()}, 'bb', {expiresIn: '1h'})
+  valid.string('account.username', e.username).is().lengthIn(1, 50)
+  valid.string('account.password', e.password).is().lengthIn(1, 50)
+  let admin = await service.loginByAdmin(e)
+  let token = jwt.sign({_id: admin._id, date: new Date().getTime()}, 'bb', {expiresIn: '1h'})
   let refreshToken = randtoken.uid(256)
-  refreshTokenMap.save(refreshToken, exists._id)
+  refreshTokenMap.save(refreshToken, admin._id)
   ctx.ok({token, refreshToken})
 })
 

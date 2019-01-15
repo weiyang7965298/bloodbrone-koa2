@@ -1,6 +1,7 @@
 const securityUtil = require('../util/securityUtil')
 const model = require('../model/user')
 const failError = require('../error/failError')
+const bizError = require('../error/bizError')
 
 module.exports = {
   save: async(e) => {
@@ -25,19 +26,26 @@ module.exports = {
     await next.updateOne(next)
   },
   findById: async(e) => {
-    return await model.findOne({_id: e._id}, '-__v') || model.null
+    return await model.findOne({_id: e._id}, '-__v -password') || model.null
   },
   count: async(filter) => {
     return await model.countDocuments({username: {$regex: `${filter.name}.*`}})
   },
   find: async(filter) => {    
-    let result = await model.find({username: {$regex: `${filter.name}.*`}}, '-__v').skip(filter.start).limit(filter.limit).sort('name')
+    let result = await model.find({username: {$regex: `${filter.name}.*`}}, '-__v -password').skip(filter.start).limit(filter.limit).sort('name')
     return result
   },
 
-  findByUsernameAndPassword: async(e) => {  
+  login: async(e) => {  
     e.password = securityUtil.digest(e.password)      
-    let result = await model.findOne({username: e.username, password: e.password}, '-__v')    
-    return result || model.null
+    let result = await model.findOne({username: e.username, password: e.password}, '-__v -password')    
+    if (!result || result.type !== 'player') throw new bizError('USERNAME_PASSWORD_INCORRECT')
+    return result
+  },
+  loginByAdmin: async(e) => {  
+    e.password = securityUtil.digest(e.password)      
+    let result = await model.findOne({username: e.username, password: e.password}, '-__v -password')
+    if (!result || result.type !== 'admin') throw new bizError('USERNAME_PASSWORD_INCORRECT')
+    return result
   }
 }

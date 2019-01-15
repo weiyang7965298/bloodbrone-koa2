@@ -1,4 +1,4 @@
-const service = require('../../../src/service/userService')
+const service = require('../../../src/service/accountService')
 
 module.exports = {
   save: () => {

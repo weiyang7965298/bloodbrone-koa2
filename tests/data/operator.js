@@ -1,11 +1,11 @@
 const weaponOperator = require('./weapon/operator')
-const userOperator = require('./user/operator')
+const accountOperator = require('./account/operator')
 
 module.exports = {
   saveWeapon: () => {
     weaponOperator.save()
   },
-  saveUser: () => {
-    userOperator.save()
+  saveAccount: () => {
+    accountOperator.save()
   }
 }

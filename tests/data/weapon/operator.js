@@ -9,7 +9,7 @@ module.exports = {
       )
     )  
     data.list.forEach(async e => {
-      await new service(e).save()
+      await service.save(e)
     })
   }
 }
