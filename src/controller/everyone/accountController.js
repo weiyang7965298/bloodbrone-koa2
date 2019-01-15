@@ -1,7 +1,7 @@
 const Router = require('koa-router')
 const router = new Router()
 
-const jwt = require('jsonwebtoken')
+const jwt = require('../../jwt/user')
 const randtoken = require('rand-token')
 
 const service = require('../../service/accountService')
@@ -26,7 +26,7 @@ router.post('/login', async(ctx, next) => {
   valid.string('user.username', e.username).is().lengthIn(1, 50)
   valid.string('user.password', e.password).is().lengthIn(1, 50)
   let player = await service.login(e)
-  let token = jwt.sign({_id: player._id, date: new Date().getTime()}, 'player', {expiresIn: '1h'})
+  let token = jwt.sign({_id: player._id})
   let refreshToken = randtoken.uid(256)
   refreshTokenMap.save(refreshToken, player._id)
   ctx.ok({token, refreshToken})
@@ -40,7 +40,7 @@ router.post('/token/refresh', async(ctx, next) => {
     ctx.ok()
     return
   }
-  let token = jwt.sign({_id: _id}, 'player', {expiresIn: '1h'})
+  let token = jwt.sign({_id: _id})
   refreshToken = randtoken.uid(256)
   refreshTokenMap.save(refreshToken, _id)
   blacklist.save(ctx.request.header.authorization, ctx.params.loginUser.exp)

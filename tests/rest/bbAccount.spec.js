@@ -7,7 +7,7 @@ const operator = require('../data/operator')
 
 const wait = require('../../src/util/wait')
 
-xdescribe('bb user controller', () => {
+describe('bb user controller', () => {
   let token
   let refreshToken
   it('save, delete', async() => {    

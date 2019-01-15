@@ -1,13 +1,11 @@
 const Router = require('koa-router')
 const router = new Router()
 
-const jwt = require('jsonwebtoken')
+const jwt = require('../../jwt/bb')
 const randtoken = require('rand-token')
 
 const service = require('../../service/accountService')
 const valid = require('../../valid')
-
-const bizError = require('../../error/bizError')
 
 const refreshTokenMap = require('../../store/refreshTokenMap')
 const blacklist = require('../../store/bbBalckList')
@@ -74,7 +72,7 @@ router.post('/bb/login', async(ctx, next) => {
   valid.string('account.username', e.username).is().lengthIn(1, 50)
   valid.string('account.password', e.password).is().lengthIn(1, 50)
   let admin = await service.loginByAdmin(e)
-  let token = jwt.sign({_id: admin._id, date: new Date().getTime()}, 'bb', {expiresIn: '1h'})
+  let token = jwt.sign({_id: admin._id})
   let refreshToken = randtoken.uid(256)
   refreshTokenMap.save(refreshToken, admin._id)
   ctx.ok({token, refreshToken})
@@ -88,7 +86,7 @@ router.post('/bb/token/refresh', async(ctx, next) => {
     ctx.ok()
     return
   }
-  let token = jwt.sign({_id: _id}, 'bb', {expiresIn: '1h'})
+  let token = jwt.sign({_id: _id})
   refreshToken = randtoken.uid(256)
   refreshTokenMap.save(refreshToken, _id)
   blacklist.save(ctx.request.header.authorization, ctx.params.loginUser.exp)

@@ -6,7 +6,7 @@ module.exports = {
   save: (k, exp) => {
     k = `${k}`
     list.push({k, exp})
-    list.sort((a, b) => b.exp - a.exp)
+    list.sort((a, b) => b.exp - a.exp)    
   },
   check: (k) => {      
     k = `${k}`
